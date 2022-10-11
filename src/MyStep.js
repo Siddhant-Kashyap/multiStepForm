@@ -7,10 +7,30 @@ import {
   Step,
   StepLabel,
 } from "@mui/material";
-
+import {
+  useForm,
+  Controller,
+  FormProvider,
+  useFormContext,
+} from "react-hook-form";
 
 const MyStep = () => {
   const [activeState, setActiveState] = useState(0);
+  const methods = useForm({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      emailAddress: "",
+      phoneNumber: "",
+      alternatePhone: "",
+      address1: "",
+      address2: "",
+      country: "",
+      cardNumber: "",
+      cardMonth: "",
+      cardYear: "",
+    },
+  });
   function getSteps() {
     return [
       "Basic Information",
@@ -19,11 +39,14 @@ const MyStep = () => {
       "Payment",
     ];
   }
-  function getStepItem(step) {
-    switch (step) {
-      case 0:
-        return (
-          <>
+  const BasicInformation = () => {
+    const { control } = useFormContext();
+    return (
+      <>
+        <Controller
+          control={control}
+          name="firstName"
+          render={({ field }) => (
             <TextField
               id="first-name"
               label="First Name"
@@ -31,8 +54,15 @@ const MyStep = () => {
               placeholder="Enter Your First Name"
               fullWidth
               margin="normal"
-              name="firstName"
+              {...field}
             />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="lastName"
+          render={({ field }) => (
             <TextField
               id="last-name"
               label="Last Name"
@@ -40,13 +70,21 @@ const MyStep = () => {
               placeholder="Enter Your Last Name"
               fullWidth
               margin="normal"
-              name="lastName"
+              {...field}
             />
-          </>
-        );
-      case 1:
-        return (
-          <>
+          )}
+        />
+      </>
+    );
+  };
+  const ContactInformation = () => {
+    const { control } = useFormContext();
+    return (
+      <>
+        <Controller
+          control={control}
+          name="emailAddress"
+          render={({ field }) => (
             <TextField
               id="email"
               label="E-mail"
@@ -54,8 +92,15 @@ const MyStep = () => {
               placeholder="Enter Your E-mail Address"
               fullWidth
               margin="normal"
-              name="emailAddress"
+              {...field}
             />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="phoneNumber"
+          render={({ field }) => (
             <TextField
               id="phone-number"
               label="Phone Number"
@@ -63,8 +108,14 @@ const MyStep = () => {
               placeholder="Enter Your Phone Number"
               fullWidth
               margin="normal"
-              name="phoneNumber"
+              {...field}
             />
+          )}
+        />
+        <Controller
+          control={control}
+          name="alternatePhone"
+          render={({ field }) => (
             <TextField
               id="alternate-phone"
               label="Alternate Phone"
@@ -72,13 +123,21 @@ const MyStep = () => {
               placeholder="Enter Your Alternate Phone"
               fullWidth
               margin="normal"
-              name="alternatePhone"
+              {...field}
             />
-          </>
-        );
-      case 2:
-        return (
-          <>
+          )}
+        />
+      </>
+    );
+  };
+  const PersonalInformation = () => {
+    const { control } = useFormContext();
+    return (
+      <>
+        <Controller
+          control={control}
+          name="address1"
+          render={({ field }) => (
             <TextField
               id="address1"
               label="Address 1"
@@ -86,8 +145,14 @@ const MyStep = () => {
               placeholder="Enter Your Address 1"
               fullWidth
               margin="normal"
-              name="address1"
+              {...field}
             />
+          )}
+        />
+        <Controller
+          control={control}
+          name="address2"
+          render={({ field }) => (
             <TextField
               id="address2"
               label="Address 2"
@@ -95,8 +160,14 @@ const MyStep = () => {
               placeholder="Enter Your Address 2"
               fullWidth
               margin="normal"
-              name="address2"
+              {...field}
             />
+          )}
+        />
+        <Controller
+          control={control}
+          name="country"
+          render={({ field }) => (
             <TextField
               id="country"
               label="Country"
@@ -104,13 +175,21 @@ const MyStep = () => {
               placeholder="Enter Your Country Name"
               fullWidth
               margin="normal"
-              name="country"
+              {...field}
             />
-          </>
-        );
-      case 3:
-        return (
-          <>
+          )}
+        />
+      </>
+    );
+  };
+  const Payment = () => {
+    const { control } = useFormContext();
+    return (
+      <>
+        <Controller
+          control={control}
+          name="cardNumber"
+          render={({ field }) => (
             <TextField
               id="cardNumber"
               label="Card Number"
@@ -118,8 +197,14 @@ const MyStep = () => {
               placeholder="Enter Your Card Number"
               fullWidth
               margin="normal"
-              name="cardNumber"
+              {...field}
             />
+          )}
+        />
+        <Controller
+          control={control}
+          name="cardMonth"
+          render={({ field }) => (
             <TextField
               id="cardMonth"
               label="Card Month"
@@ -127,8 +212,14 @@ const MyStep = () => {
               placeholder="Enter Your Card Month"
               fullWidth
               margin="normal"
-              name="cardMonth"
+              {...field}
             />
+          )}
+        />
+        <Controller
+          control={control}
+          name="cardYear"
+          render={({ field }) => (
             <TextField
               id="cardYear"
               label="Card Year"
@@ -136,11 +227,25 @@ const MyStep = () => {
               placeholder="Enter Your Card Year"
               fullWidth
               margin="normal"
-              name="cardYear"
+              {...field}
             />
-          </>
-        );
-        default:return "Error"
+          )}
+        />
+      </>
+    );
+  };
+  function getStepItem(step) {
+    switch (step) {
+      case 0:
+        return <BasicInformation />;
+      case 1:
+        return <ContactInformation />;
+      case 2:
+        return <PersonalInformation />;
+      case 3:
+        <Payment />;
+      default:
+        return "";
     }
   }
 
@@ -148,9 +253,14 @@ const MyStep = () => {
   const handleBack = () => {
     setActiveState(activeState - 1);
   };
-  const handleNext = () => {
+  const handleNext = (data) => {
+    console.log(data);
     setActiveState(activeState + 1);
   };
+
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  // };
 
   return (
     <div>
@@ -170,17 +280,21 @@ const MyStep = () => {
         </Typography>
       ) : (
         <>
-          <form>{getStepItem(activeState)}</form>
-          <Button
-            variant="contained"
-            disabled={activeState === 0}
-            onClick={handleBack}
-          >
-            BACK
-          </Button>
-          <Button variant="contained" onClick={handleNext}>
-            {activeState === steps.length-1 ? "FINISH" : "NEXT"}
-          </Button>
+          <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(handleNext)}>
+              {getStepItem(activeState)}
+              <Button
+                variant="contained"
+                disabled={activeState === 0}
+                onClick={handleBack}
+              >
+                BACK
+              </Button>
+              <Button variant="contained"  type="submit">
+                {activeState === steps.length - 1 ? "FINISH" : "NEXT"}
+              </Button>
+            </form>
+          </FormProvider>
         </>
       )}
     </div>
