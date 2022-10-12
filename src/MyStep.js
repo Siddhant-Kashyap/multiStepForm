@@ -16,6 +16,20 @@ import {
 
 const MyStep = () => {
   const [activeState, setActiveState] = useState(0);
+  var info={
+    firstName: "",
+    lastName: "",
+    emailAddress: "",
+    phoneNumber: "",
+    alternatePhone: "",
+    address1: "",
+    address2: "",
+    country: "",
+    cardNumber: "",
+    cardMonth: "",
+    cardYear: "",
+  };
+  
   const methods = useForm({
     defaultValues: {
       firstName: "",
@@ -39,6 +53,7 @@ const MyStep = () => {
       "Payment",
     ];
   }
+  
   const BasicInformation = () => {
     const { control } = useFormContext();
     return (
@@ -234,6 +249,7 @@ const MyStep = () => {
       </>
     );
   };
+ 
   function getStepItem(step) {
     switch (step) {
       case 0:
@@ -243,10 +259,17 @@ const MyStep = () => {
       case 2:
         return <PersonalInformation />;
       case 3:
-        <Payment />;
+        return <Payment />;
       default:
         return "";
     }
+  }
+  const getInfo=(info)=>{
+    return(
+      <>
+      {JSON.stringify(info)}
+      </>
+    )
   }
 
   const steps = getSteps();
@@ -254,8 +277,19 @@ const MyStep = () => {
     setActiveState(activeState - 1);
   };
   const handleNext = (data) => {
-    console.log(data);
-    setActiveState(activeState + 1);
+    // console.log(data);
+     info ={...data}
+    console.log(info);
+    setActiveState(activeState+1);
+    console.log(activeState)
+    if(activeState===3){
+       for(let key in info){
+        console.log(`${key}===> ${info[key]}`)
+       
+
+      }
+   
+    }
   };
 
   // const onSubmit = (data) => {
@@ -275,9 +309,8 @@ const MyStep = () => {
       </Stepper>
 
       {activeState === steps.length ? (
-        <Typography variant="h3" align="center">
-          "THANK YOU"
-        </Typography>
+        {getInfo} 
+      
       ) : (
         <>
           <FormProvider {...methods}>
@@ -297,6 +330,7 @@ const MyStep = () => {
           </FormProvider>
         </>
       )}
+      
     </div>
   );
 };
